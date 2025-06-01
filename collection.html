@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nostra - Collections</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.page-title {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .container {
+      display: flex;
+      padding: 20px;
+    }
+
+    .sidebar {
+      width: 220px;
+      padding-right: 20px;
+      border-right: 1px solid #ccc;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar h3 {
+      margin-bottom: 10px;
+    }
+
+    .sidebar label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding-left: 20px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="page-title">Collections</h1>
+
+  <div class="container">
+    <!-- Sidebar Filters -->
+    <div class="sidebar">
+      <h2>Nostra</h2>
+
+      <h3>Season</h3>
+      <label><input type="checkbox" class="filter" value="summer"> Summer</label>
+      <label><input type="checkbox" class="filter" value="festivals"> Festivals</label>
+      <label><input type="checkbox" class="filter" value="beach"> Beach</label>
+
+      <h3 style="margin-top: 20px;">Colors</h3>
+      <label><input type="checkbox" class="filter" value="red"> Red</label>
+      <label><input type="checkbox" class="filter" value="white"> White</label>
+      <label><input type="checkbox" class="filter" value="orange"> Orange</label>
+      <label><input type="checkbox" class="filter" value="green"> Green</label>
+
+      <h3 style="margin-top: 20px;">Arrivals</h3>
+      <label><input type="checkbox" class="filter" value="new"> New</label>
+      <label><input type="checkbox" class="filter" value="old"> Old</label>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <input type="text" id="searchBox" class="search-box" placeholder="Search products...">
+
+      <div class="product-grid" id="productGrid">
+        <div class="product-card" data-tags="summer red new">
+          <img src="./images/p1.webp" alt="Modern Kurthi" />
+          <h2>Modern Kurthi</h2>
+        </div>
+        <div class="product-card" data-tags="festivals orange old">
+          <img src="./images/p3.jpg" alt="Lehanga" />
+          <h2>Lehanga</h2>
+        </div>
+        <div class="product-card" data-tags="beach white new">
+          <img src="./images/p10.jpg" alt="Western Tops" />
+          <h2>Western Tops</h2>
+        </div>
+        <div class="product-card" data-tags="summer orange old">
+          <img src="./images/p4.jpg" alt="Kurtas Set" />
+          <h2>Kurtas Set</h2>
+        </div>
+        <div class="product-card" data-tags="festivals red new">
+          <img src="./images/p9.jpg" alt="Readymade Set" />
+          <h2>Readymade Set</h2>
+        </div>
+        <div class="product-card" data-tags="orange white festivals">
+          <img src="./images/p6.jpg" alt="Saree" />
+          <h2>Saree</h2>
+        </div>
+        <div class="product-card" data-tags="summer green new">
+          <img src="./images/p7.png" alt="Kurtis" />
+          <h2>Kurtis</h2>
+        </div>
+        <div class="product-card" data-tags="festivals orange old">
+          <img src="./images/p5.jpg" alt="Top" />
+          <h2>Top</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const checkboxes = document.querySelectorAll('.filter');
+    const cards = document.querySelectorAll('.product-card');
+    const searchBox = document.getElementById('searchBox');
+
+    function filterProducts() {
+      const activeFilters = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value.toLowerCase());
+
+      const searchTerm = searchBox.value.toLowerCase();
+
+      cards.forEach(card => {
+        const tags = card.dataset.tags.toLowerCase().split(" ");
+        const name = card.querySelector("h2").innerText.toLowerCase();
+
+        const matchesFilter = activeFilters.length === 0 || activeFilters.some(tag => tags.includes(tag));
+        const matchesSearch = searchTerm === "" || name.includes(searchTerm);
+
+        card.style.display = (matchesFilter && matchesSearch) ? "block" : "none";
+      });
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+    searchBox.addEventListener('keyup', filterProducts);
+  </script>
+
+</body>
+</html>
